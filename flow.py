@@ -3,13 +3,12 @@ import time
 import random
 from itertools import cycle
 
-st.set_page_config(page_title="Corazón para Nahomy", page_icon="💖", layout="wide")
+st.set_page_config(page_title="Corazón para Nahomy 💖", page_icon="💖", layout="wide")
 
-# Nombre y palabras bonitas
+# --- CONFIGURACIÓN ---
 nombre = "Nahomy"
-palabras = ["Increíble", "Valiente", "Amable", "Inspiradora", "Única", "Radiante", "Brillante", "Especial"]
+palabras = ["Increíble", "Valiente", "Amable", "Inspiradora", "Única", "Radiante", "Especial", "Brillante"]
 
-# Patrón base del corazón
 heart_pattern = [
     "  NNN   NNN  ",
     " NNNNN NNNNN ",
@@ -22,7 +21,13 @@ heart_pattern = [
     "      N      "
 ]
 
-# Función para formar el corazón con el nombre
+# Ciclo de colores para el corazón
+colores = cycle(["#ff4d6d", "#ff66a3", "#ff99c8", "#ff4d6d"])
+
+# Placeholder para animación
+placeholder = st.empty()
+
+# Función para formar el corazón con el nombre y escala (latido)
 def formar_corazon(nombre, escala=1.0):
     lines = []
     for line in heart_pattern:
@@ -36,6 +41,7 @@ def formar_corazon(nombre, escala=1.0):
                 new_line += " "
         lines.append(new_line)
     if escala != 1.0:
+        # Escalar el corazón duplicando caracteres y líneas
         new_lines = []
         for line in lines:
             scaled_line = ""
@@ -45,17 +51,13 @@ def formar_corazon(nombre, escala=1.0):
         return new_lines
     return lines
 
-# Ciclo de colores para el corazón
-colores = cycle(["#ff4d6d", "#ff66a3", "#ff99c8", "#ff4d6d"])
-
-# Placeholder para animación
-placeholder = st.empty()
-
+# Bucle principal
 try:
     escala = 1.0
     creciendo = True
     while True:
         canvas = []
+        
         # Latido del corazón
         if creciendo:
             escala += 0.05
@@ -65,7 +67,7 @@ try:
             escala -= 0.05
             if escala <= 1.0:
                 creciendo = True
-
+        
         corazon = formar_corazon(nombre, escala)
         color_actual = next(colores)
 
@@ -73,19 +75,18 @@ try:
             new_row = ""
             for char in row:
                 if char == " ":
-                    # Espacios pueden ser estrellas o flores aleatorias
-                    new_row += random.choice([" ", "⭐", "🌸", " "])
+                    # Espacios vacíos: estrellas y flores aleatorias
+                    new_row += random.choice([" ", "⭐", "🌸", "✨", " "])
                 else:
-                    # Letras del nombre
                     new_row += char
             canvas.append(new_row)
 
-        # Palabras flotando dentro del corazón
+        # Palabras bonitas flotando dentro del corazón
         palabras_line = "   ".join(random.sample(palabras, k=len(palabras)))
 
         # Mostrar en Streamlit
         placeholder.markdown(
-            f"<pre style='font-size:20px; line-height:1.1; text-align:center; color:{color_actual}'>{'\n'.join(canvas)}</pre>\n"
+            f"<pre style='font-size:22px; line-height:1.1; text-align:center; color:{color_actual}; font-weight:bold;'>{'\n'.join(canvas)}</pre>"
             f"<h3 style='text-align:center; color:#ffcc00'>{palabras_line}</h3>",
             unsafe_allow_html=True
         )
@@ -94,5 +95,7 @@ try:
 
 except KeyboardInterrupt:
     placeholder.markdown("<h2 style='text-align:center; color:#ff4d6d;'>💖 Animación terminada 💖</h2>", unsafe_allow_html=True)
+
+
 
 
