@@ -2,3 +2,4 @@ streamlit>=1.24.1
 streamlit-drawable-canvas>=0.9.0
 numpy>=1.26.0
 Pillow>=10.0.0
+pygame
